@@ -1,8 +1,20 @@
 public class Message {
+    /**
+     * ID of the message
+     */
     int id;
+    /**
+     * ID of who posted the message
+     */
     int userID;
     
+    /**
+     * Is Message hidden?
+     */
     boolean isHidden;
+    /**
+     * Text display to users
+     */
     String msgContent;
 
     /**
@@ -47,12 +59,12 @@ public class Message {
 
     /**
      * 
-     * @return
+     * @return message Content
      * 
      */
     String to_string()
     {
-        return null;
+        return this.msgContent;
     }
 
     /**

@@ -1,15 +1,22 @@
 import java.util.List;
 public class Channel {
+    /**
+     * This integer holds the ID of the channel
+     */
     int id;
 
     String name;
+
+    /**
+     * This lists holds all the messages from this channel including the hidden messages
+     */
     List<Message> messages;
 
     boolean isHidden;
 
     int getID() { return this.id; }
     String getName() { return this.name; }
-    boolean getStatus() { return isHidden; }
+    boolean getStatus() { return this.isHidden; }
 
     private void setID(int id) { this.id = id; }
 
