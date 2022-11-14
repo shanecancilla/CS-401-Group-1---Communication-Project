@@ -30,6 +30,31 @@ public class Client {
 
     void doCreateChannel()
     {
+
+    }
+
+    void doJoinChannel()
+    {
+
+    }
+
+    void doDisplayChannels()
+    {
+
+    }
+
+    void doChangeChannel()
+    {
+
+    }
+
+    void doLeaveChannel()
+    {
+
+    }
+
+    void doDisconnect()
+    {
         
     }
 
