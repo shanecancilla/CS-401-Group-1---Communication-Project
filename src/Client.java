@@ -18,6 +18,21 @@ public class Client {
 
     }
 
+    void doSignup()
+    {
+
+    }
+
+    void doSendMessage()
+    {
+
+    }
+
+    void doCreateChannel()
+    {
+        
+    }
+
     /**
      * The entry point for client side of the communication system
      * @param args Arguments for client (unused)
