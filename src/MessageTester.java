@@ -1,3 +1,7 @@
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
 public class MessageTester {
     @Test
     public void testMsg()
