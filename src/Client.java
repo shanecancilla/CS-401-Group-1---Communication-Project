@@ -1,4 +1,4 @@
-
+import java.net.Socket;
 
 public class Client {
 
@@ -58,6 +58,7 @@ public class Client {
      */
     public void main(String[] args)
     {
-        
+        Socket socket = null;
+        Lo
     }
 }
