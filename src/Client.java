@@ -1,12 +1,6 @@
 
-import javax.swing.JFrame;
 
 public class Client {
-
-    public class UI
-    {
-        JFrame frame;
-    }
 
     void doLogin()
     {
