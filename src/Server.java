@@ -9,11 +9,15 @@ import java.lang.Thread;
 public class Server {
 
     int numUsers = 0;
+    int numITUsers = 0;
     int numChannels = 0;
+    int numPrivateChannels = 0;
 
     List<User> users;
     List<ITUser> ITUsers;
+
     List<Channel> channels;
+    List<PrivateMessage> privateMessages;
 
     /**
      * Client Handler to handle clients
