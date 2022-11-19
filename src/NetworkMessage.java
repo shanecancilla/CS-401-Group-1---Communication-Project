@@ -1,11 +1,5 @@
-public class NetworkMessage {
-    
-    int id;
-    NetworkMessageType type;
-    String message;
+public interface NetworkMessage {
+    static NetworkMessageType type;
+    static String message;
 
-    NetworkMessage()
-    {
-        
-    }
 }

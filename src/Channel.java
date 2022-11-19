@@ -104,8 +104,6 @@ public class Channel {
         messages.add(msg);
     }
 
-
-
     /**
      * Constructor for the channel
      * 

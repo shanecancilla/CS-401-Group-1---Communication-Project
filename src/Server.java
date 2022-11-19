@@ -9,11 +9,15 @@ import java.lang.Thread;
 public class Server {
 
     int numUsers = 0;
+    int numITUsers = 0;
     int numChannels = 0;
+    int numPrivateChannels = 0;
 
     List<User> users;
     List<ITUser> ITUsers;
+
     List<Channel> channels;
+    List<PrivateMessage> privateMessages;
 
     /**
      * Client Handler to handle clients
@@ -21,7 +25,8 @@ public class Server {
      */
     public class ClientHandler implements Runnable
     {
-        void run()
+        Socket socket;
+        public void run()
         {
             try
             {
@@ -33,6 +38,17 @@ public class Server {
             catch(Exception e)
             {
                 e.printStackTrace();
+                try
+                {
+                    if(socket != null)
+                        if (socket.isClosed() == false)
+                            socket.close();
+                }
+                catch(Exception ex)
+                {
+                    ex.printStackTrace();
+                }
+                
             }
             finally
             {
@@ -41,9 +57,9 @@ public class Server {
 
         }
 
-        ClientHandler()
+        ClientHandler(Socket newSocket)
         {
-
+            this.socket = newSocket;
         }
     }
 
@@ -60,10 +76,12 @@ public class Server {
             {
                 Socket client = server.accept();
 
+                ClientHandler handler = new ClientHandler(client);
 
+                Thread t = new Thread(handler);
+                t.start();
             }
         } catch (Exception e) {
-            // TODO: handle exception
             e.printStackTrace();
         }
         finally

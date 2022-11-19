@@ -1,12 +1,6 @@
-
-import javax.swing.JFrame;
+import java.net.Socket;
 
 public class Client {
-
-    public class UI
-    {
-        JFrame frame;
-    }
 
     void doLogin()
     {
@@ -64,6 +58,7 @@ public class Client {
      */
     public void main(String[] args)
     {
-        
+        Socket socket = null;
+        Lo
     }
 }
