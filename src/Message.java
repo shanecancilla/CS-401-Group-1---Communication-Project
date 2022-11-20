@@ -117,6 +117,8 @@ public class Message {
      * @param   ID message ID
      * @param   userID user ID
      * 
+     * @see msgContent
+     * 
      * @author Aftersol
      */
     Message(int id, int userID, String msgContent)

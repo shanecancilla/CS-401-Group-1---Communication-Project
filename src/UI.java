@@ -3,7 +3,7 @@ import javax.swing.JFrame;
 public class UI
 {
     /**
-     *  Frame for
+     *  Frame for various buttons to do actions
      */
     JFrame frame;
 
