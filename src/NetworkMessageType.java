@@ -1,3 +1,3 @@
 public enum NetworkMessageType {
-    None, Message, Login, Logout, CreateUser, CreateChannel, DeleteChannel, SendMessage, HideMessage
+    None, Success, RequestUpdate, Message, Login, Logout, CreateUser, CreateChannel, HideChannel, CreateMessage, HideMessage
 }
