@@ -1,9 +1,13 @@
 import java.util.List;
+import java.util.ArrayList;
 
 import java.net.ServerSocket;
 import java.net.Socket;
 
 import java.io.File;
+
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -35,6 +39,7 @@ public class Server {
     void loadITUser()
     {
         File fp = new File("itusers.txt");
+        
     }
 
     void broadcastMessages()
@@ -53,17 +58,124 @@ public class Server {
         {
             try
             {
-                ObjectOutputStream outputStream;
-                ObjectInputStream inputStream;
+                OutputStream outputStream = socket.getOutputStream();
+                InputStream inputStream = socket.getInputStream();
 
-                while (true)
+                ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+                ObjectInputStream ObjectInputStream = new ObjectInputStream(inputStream);
+
+                List<NetworkMessage> outputMessages = new ArrayList<NetworkMessage>();
+                List<NetworkMessage> inputMessages = new ArrayList<NetworkMessage>();
+                
+                boolean shouldQuit = false;
+
+                while (shouldQuit == false)
                 {
+                    inputMessages = (List<NetworkMessage>) ObjectInputStream.readObject();
 
+                    for (NetworkMessage msg : inputMessages)
+                    {
+                        switch(msg.getNetworkMessageType())
+                        {
+                            case None:
+                            {
+                                break;
+                            }
+                            case Login:
+                            {
+                                break;
+                            }
+                            case Logout:
+                            {
+                                NetworkMessage logOutSucess;
+                                shouldQuit = true;
+                                outputMessages.add(logOutSucess);
+                                break;   
+                            }
+                            case CreateUser:
+                            {
+                                String newUsername = "";
+                                String newPassword = "";
+                                for (int i = 0; i < users.size(); i++)
+                                {
+                                    if (users.get(i).getUsername().equals(newUsername))
+                                    {
+                                        shouldQuit = true;
+                                    }
+                                }
+                                break;
+                            }
+                            case CreateChannel:
+                            {
+                                String newChannelName = "";
+                                for (int i = 0; i < channels.size(); i++)
+                                {
+                                    if (channels.get(i).getName().equals(newChannelName))
+                                    {
+                                        break;        
+                                    }
+                                }
+
+                                Channel newChannel = new Channel(numChannels, newChannelName);
+                                channels.add(newChannel);
+                                break;
+                            }
+                            case HideChannel:
+                            {
+                                String channelName = "";
+                                for (int i = 0; i < channels.size(); i++)
+                                {
+                                    if (channels.get(i).getName().equals(channelName))
+                                    {
+                                        channels.get(i).hideChannel();
+                                        break;
+                                    }
+
+                                }
+                                break;
+                            }
+                            case CreateMessage:
+                            {
+                                String message = "";
+                                String channel = "";
+
+                                for (int i = 0; i < channels.size(); i++)
+                                {
+                                    if (channels.get(i).getName().equals(channel))
+                                    {
+                                        Message newMessage = new Message(channels.get(i).messages.size(), 0, message);
+                                        channels.get(i).addMessage(newMessage);
+                                        break;
+                                    }
+
+                                } 
+                                break;
+                            }
+                            case HideMessage:
+                            {
+                                break;
+                            }
+
+                            default:
+                            {
+                                break;
+                            }
+                        }
+
+                    }
+
+                    objectOutputStream.writeObject(outputMessages);
+                    objectOutputStream.reset();
                 }
+
+                socket.close();
             }
             catch(Exception e)
             {
                 e.printStackTrace();
+            }
+            finally
+            {
                 try
                 {
                     if(socket != null)
@@ -74,11 +186,6 @@ public class Server {
                 {
                     ex.printStackTrace();
                 }
-                
-            }
-            finally
-            {
-
             }
 
         }
