@@ -3,6 +3,8 @@ import java.util.List;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import java.io.File;
+
 import java.lang.Runnable;
 import java.lang.Thread;
 
@@ -18,6 +20,19 @@ public class Server {
 
     List<Channel> channels;
     List<PrivateMessage> privateMessages;
+
+    void loadUsers()
+    {
+        File fp = new File("users.txt");
+    }
+    void loadChannels()
+    {
+        File fp = new File("channels.txt");
+    }
+    void loadITUser()
+    {
+        File fp = new File("itusers.txt");
+    }
 
     /**
      * Client Handler to handle clients
