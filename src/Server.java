@@ -3,6 +3,11 @@ import java.util.List;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import java.io.File;
+
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 import java.lang.Runnable;
 import java.lang.Thread;
 
@@ -19,6 +24,24 @@ public class Server {
     List<Channel> channels;
     List<PrivateMessage> privateMessages;
 
+    void loadUsers()
+    {
+        File fp = new File("users.txt");
+    }
+    void loadChannels()
+    {
+        File fp = new File("channels.txt");
+    }
+    void loadITUser()
+    {
+        File fp = new File("itusers.txt");
+    }
+
+    void broadcastMessages()
+    {
+
+    }
+
     /**
      * Client Handler to handle clients
      * @see Client
@@ -30,6 +53,9 @@ public class Server {
         {
             try
             {
+                ObjectOutputStream outputStream;
+                ObjectInputStream inputStream;
+
                 while (true)
                 {
 
