@@ -157,7 +157,7 @@ public class Server {
 		
 		try
 		{
-			fp = new FileWriter("users.txt");
+			fp = new FileWriter("ITUsers.txt");
 			fp.write(str);
 		}
 		catch (Exception e)
@@ -350,7 +350,6 @@ public class Server {
                                 {
                                     if (channels.get(i).getName().equals(channel))
                                     {
-                                        if (channels.get(i).size() < messageID)
                                         break;
                                     }
 
