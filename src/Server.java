@@ -3,9 +3,11 @@ import java.util.ArrayList;
 
 import java.net.ServerSocket;
 import java.net.Socket;
-
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.io.File;
-
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -31,15 +33,145 @@ public class Server {
     void loadUsers()
     {
         File fp = new File("users.txt");
+        {
+
+        }
     }
+
+    void saveUsers()
+    {
+        String str = "";
+
+		for (int user = 0; user < users.size(); user++)
+		{
+			str += Integer.toString(user)+ ";" + 
+            users.get(user).getUsername() + ";" +
+            users.get(user).getPassword() + "\n";
+			
+		}
+        
+		FileWriter fp;
+		
+		try
+		{
+			fp = new FileWriter("users.txt");
+			fp.write(str);
+		}
+		catch (Exception e)
+		{
+			System.out.println("Cannot write " + "users.txt");
+			return;
+		}
+		try {
+		fp.close();
+		}
+		catch(Exception e)
+		{
+			return;
+		}
+		
+    }
+
     void loadChannels()
     {
         File fp = new File("channels.txt");
+
     }
+
+    void saveChannels()
+    {
+        
+        String str = "";
+        try {
+            Files.createDirectory(Paths.get("channels"));
+        } catch (IOException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+            return;
+        }
+
+		for (int channel = 0; channel < channels.size(); channel++)
+		{
+            try
+            {
+                String channelStr = "";
+                FileWriter fp = new FileWriter("channels/" + channels.get(channel).getName() + ".txt");
+                for (int message = 0; message < channels.get(channel).messages.size(); message++)
+                {
+                    str += 
+                        Integer.toString(channels.get(channel).messages.get(message).getID()) + ";" +
+                        Integer.toString(channels.get(channel).messages.get(message).getUserID()) + ";" +
+                        Boolean.toString(channels.get(channel).messages.get(message).isHidden()) + ";" +
+                        channels.get(channel).messages.get(message).getMessageContent() + "\n";
+
+                }
+                fp.write(channelStr);
+                fp.close();
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+
+		}
+        
+		FileWriter fp;
+		
+		try
+		{
+			fp = new FileWriter("users.txt");
+			fp.write(str);
+		}
+		catch (Exception e)
+		{
+			System.out.println("Cannot write " + "users.txt");
+			return;
+		}
+		try {
+		fp.close();
+		}
+		catch(Exception e)
+		{
+			return;
+		}
+    }
+
     void loadITUser()
     {
-        File fp = new File("itusers.txt");
+
         
+    }
+
+    void saveITUsers()
+    {
+        String str = "";
+
+		for (int user = 0; user < ITUsers.size(); user++)
+		{
+			str += Integer.toString(user)+ ";" + 
+            ITUsers.get(user).getUsername() + ";" +
+            ITUsers.get(user).getPassword() + "\n";
+		}
+        
+		FileWriter fp;
+		
+		try
+		{
+			fp = new FileWriter("users.txt");
+			fp.write(str);
+		}
+		catch (Exception e)
+		{
+			System.out.println("Cannot write " + "users.txt");
+			return;
+		}
+		try {
+		fp.close();
+		}
+		catch(Exception e)
+		{
+			return;
+		}
     }
 
     void broadcastMessages()
@@ -68,8 +200,78 @@ public class Server {
                 List<NetworkMessage> inputMessages = new ArrayList<NetworkMessage>();
                 
                 boolean shouldQuit = false;
+                boolean hasLogin = false;
+                while (hasLogin == false)
+                {
+                    inputMessages = (List<NetworkMessage>) ObjectInputStream.readObject();
+                    for (NetworkMessage msg : inputMessages)
+                    {
+                        switch(msg.getNetworkMessageType())
+                        {
+                            case None:
+                            {
+                                break;
+                            }
+                            case Login:
+                            {
+                                boolean successful = false;
+                                
+                                String newUsername = "";
+                                String newPassword = "";
+                                for (int i = 0; i < users.size(); i++)
+                                {
+                                    if (users.get(i).getUsername().equals(newUsername))
+                                    {
+                                        if (users.get(i).getPassword().equals(newPassword))
+                                        {
+                                            successful = true;
+                                        }   
+                                        break;
+                                    }
+                                }
 
-                while (shouldQuit == false)
+                                NetworkMessage newMessage = 
+                                    (successful == true) ? 
+                                    new SuccessMessage(NetworkMessageType.Success) :
+                                    new SuccessMessage(NetworkMessageType.Failure);
+                                
+                                outputMessages.add(newMessage);
+                                break;
+                            }
+                            case CreateUser:
+                            {
+                                boolean successful = false;
+
+                                String newUsername = "";
+                                String newPassword = "";
+                                for (int i = 0; i < users.size(); i++)
+                                {
+                                    if (users.get(i).getUsername().equals(newUsername))
+                                    {
+                                        users.add(new User(users.size(), newUsername, newPassword));
+                                        successful = true;
+                                        shouldQuit = true;
+                                        break;
+                                    }
+                                }
+
+                                NetworkMessage newMessage = 
+                                    (successful == true) ? 
+                                    new SuccessMessage(NetworkMessageType.Success) :
+                                    new SuccessMessage(NetworkMessageType.Failure);
+                                
+                                outputMessages.add(newMessage);
+                                break;
+                            }
+                            default:
+                            {
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                while (shouldQuit == false && hasLogin == true)
                 {
                     inputMessages = (List<NetworkMessage>) ObjectInputStream.readObject();
 
@@ -81,30 +283,15 @@ public class Server {
                             {
                                 break;
                             }
-                            case Login:
-                            {
-                                break;
-                            }
+
                             case Logout:
                             {
-                                NetworkMessage logOutSucess;
+                                NetworkMessage logOutSucess = new SuccessMessage();
                                 shouldQuit = true;
                                 outputMessages.add(logOutSucess);
                                 break;   
                             }
-                            case CreateUser:
-                            {
-                                String newUsername = "";
-                                String newPassword = "";
-                                for (int i = 0; i < users.size(); i++)
-                                {
-                                    if (users.get(i).getUsername().equals(newUsername))
-                                    {
-                                        shouldQuit = true;
-                                    }
-                                }
-                                break;
-                            }
+
                             case CreateChannel:
                             {
                                 String newChannelName = "";
@@ -138,12 +325,13 @@ public class Server {
                             {
                                 String message = "";
                                 String channel = "";
+                                int userID = 0;
 
                                 for (int i = 0; i < channels.size(); i++)
                                 {
                                     if (channels.get(i).getName().equals(channel))
                                     {
-                                        Message newMessage = new Message(channels.get(i).messages.size(), 0, message);
+                                        Message newMessage = new Message(channels.get(i).messages.size(), userID, message);
                                         channels.get(i).addMessage(newMessage);
                                         break;
                                     }
@@ -153,6 +341,20 @@ public class Server {
                             }
                             case HideMessage:
                             {
+                                String message = "";
+                                String channel = "";
+                                int userID = 0;
+                                int messageID = 0;
+
+                                for (int i = 0; i < channels.size(); i++)
+                                {
+                                    if (channels.get(i).getName().equals(channel))
+                                    {
+                                        if (channels.get(i).size() < messageID)
+                                        break;
+                                    }
+
+                                } 
                                 break;
                             }
 
