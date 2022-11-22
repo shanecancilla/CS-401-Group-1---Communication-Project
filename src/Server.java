@@ -28,7 +28,7 @@ public class Server {
     List<ITUser> ITUsers;
 
     List<Channel> channels;
-    List<PrivateMessage> privateMessages;
+    List<PrivateChannels> privateMessages;
 
     void loadUsers()
     {
