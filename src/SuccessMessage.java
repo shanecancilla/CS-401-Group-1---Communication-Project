@@ -29,7 +29,6 @@ public class SuccessMessage implements NetworkMessage{
     SuccessMessage()
     {
         setNetworkMessageType();
-        setMessage("success");
     }
 
     SuccessMessage(String str)
@@ -38,9 +37,14 @@ public class SuccessMessage implements NetworkMessage{
         setMessage(str);
     }
 
-    SuccessMessage(String str, NetworkMessageType)
+    SuccessMessage(NetworkMessageType type) 
     {
-        setNetworkMessageType();
+        setNetworkMessageType(type);
+    }
+
+    SuccessMessage(String str, NetworkMessageType type) 
+    {
+        setNetworkMessageType(type);
         setMessage(str);
     }
 }
