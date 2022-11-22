@@ -46,7 +46,7 @@ public class Message {
      * 
      * @author Aftersol
      */
-    boolean getHiddenStatus() { return this.isHidden; }
+    boolean isHidden() { return this.isHidden; }
 
     /**
      * This function returns the string content of the message class
