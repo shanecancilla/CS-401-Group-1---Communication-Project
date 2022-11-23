@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -33,8 +35,23 @@ public class Server {
     void loadUsers()
     {
         File fp = new File("users.txt");
+        try
         {
+            Scanner scan = new Scanner(fp);
 
+            while(scan.hasNextLine())
+            {
+                String line = scan.nextLine();
+                String tokens[] = line.split(";");
+
+                users.add(new User(Integer.parseInt(tokens[0]), tokens[1], tokens[2]));
+                numUsers += 1;
+            }
+            scan.close();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
         }
     }
 
@@ -76,6 +93,64 @@ public class Server {
     {
         File fp = new File("channels.txt");
 
+        try {
+            Files.createDirectory(Paths.get("channels"));
+        } catch (IOException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+            return;
+        }
+
+        try
+        {
+            Scanner scan = new Scanner(fp);
+            while (scan.hasNextLine())
+            {
+                String line = scan.nextLine();
+                String tokens[] = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+                tokens[1] = tokens[1].substring(1, tokens.length - 1);
+
+                Channel channel = new Channel(Integer.parseInt(tokens[0]), tokens[1]);
+                if (Boolean.parseBoolean(tokens[2]))
+                {
+                    channel.hideChannel();
+                }
+                
+
+                try
+                {
+                    File channelFP = new File("channels/" + channel.getName() + ".txt");
+
+                    Scanner scan0 = new Scanner(channelFP);
+                    while (scan0.hasNextLine())
+                    {
+                        String secondLine = scan0.nextLine();
+                        String secondTokens[] = secondLine.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+
+                        Message msg = new Message(Integer.parseInt(secondTokens[0]), Integer.parseInt(secondTokens[1]), secondTokens[3].substring(1, secondTokens.length - 1));
+                        if (Boolean.parseBoolean(secondTokens[2]))
+                        {
+                            msg.hideMessage();
+                        }
+                        channel.addMessage(msg);
+                    }
+                    scan0.close();
+                }
+                catch (Exception e0)
+                {
+                    e0.printStackTrace();
+                }
+
+                channels.add(channel);
+            }
+
+            scan.close();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
     }
 
     void saveChannels()
@@ -85,16 +160,26 @@ public class Server {
         try {
             Files.createDirectory(Paths.get("channels"));
         } catch (IOException e1) {
-            // TODO Auto-generated catch block
             e1.printStackTrace();
             return;
         }
+
+        List<String> channelMetadata = new ArrayList<>(channels.size());
 
 		for (int channel = 0; channel < channels.size(); channel++)
 		{
             try
             {
                 String channelStr = "";
+
+                String channelLine = 
+                    Integer.toString(channels.get(channel).getID()) + ";" +
+                    "\"" + channels.get(channel).getName() + "\"" + ";" +
+                    Boolean.toString(channels.get(channel).isHidden());
+
+                channelMetadata.add(channelLine);
+
+
                 FileWriter fp = new FileWriter("channels/" + channels.get(channel).getName() + ".txt");
                 for (int message = 0; message < channels.get(channel).messages.size(); message++)
                 {
@@ -102,7 +187,7 @@ public class Server {
                         Integer.toString(channels.get(channel).messages.get(message).getID()) + ";" +
                         Integer.toString(channels.get(channel).messages.get(message).getUserID()) + ";" +
                         Boolean.toString(channels.get(channel).messages.get(message).isHidden()) + ";" +
-                        channels.get(channel).messages.get(message).getMessageContent() + "\n";
+                        "\"" + channels.get(channel).messages.get(message).getMessageContent() + "\""+ "\n";
 
                 }
                 fp.write(channelStr);
@@ -119,12 +204,18 @@ public class Server {
 		
 		try
 		{
-			fp = new FileWriter("users.txt");
+			fp = new FileWriter("channels.txt");
+
+            for (int channel = 0; channel < channelMetadata.size(); channel++)
+            {
+                str += channelMetadata.get(channel) + "\n";
+            }
+
 			fp.write(str);
 		}
 		catch (Exception e)
 		{
-			System.out.println("Cannot write " + "users.txt");
+			System.out.println("Cannot write " + "channels.txt");
 			return;
 		}
 		try {
@@ -138,7 +229,25 @@ public class Server {
 
     void loadITUser()
     {
+        File fp = new File("ITUsers.txt");
+        try
+        {
+            Scanner scan = new Scanner(fp);
 
+            while(scan.hasNextLine())
+            {
+                String line = scan.nextLine();
+                String tokens[] = line.split(";");
+
+                ITUsers.add(new ITUser(Integer.parseInt(tokens[0]), tokens[1], tokens[2]));
+                numITUsers += 1;
+            }
+            scan.close();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
         
     }
 
