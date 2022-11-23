@@ -96,7 +96,6 @@ public class Server {
         try {
             Files.createDirectory(Paths.get("channels"));
         } catch (IOException e1) {
-            // TODO Auto-generated catch block
             e1.printStackTrace();
             return;
         }
@@ -512,6 +511,12 @@ public class Server {
      */
     public void main(String[] args)
     {
+        try {
+            Files.createDirectory(Paths.get("channels"));
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        
         ServerSocket server = null;
         try {
             server = new ServerSocket(1234);
