@@ -57,7 +57,7 @@ public class Channel {
      * 
      * @author Aftersol
      */
-    boolean getHiddenStatus() { return this.isHidden; }
+    boolean isHidden() { return this.isHidden; }
 
     /**
      * Sets the ID of the channel
