@@ -106,6 +106,8 @@ public class Server {
             while (scan.hasNextLine())
             {
                 String line = scan.nextLine();
+
+                // https://stackoverflow.com/a/18893443
                 String tokens[] = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
                 tokens[1] = tokens[1].substring(1, tokens.length - 1);
 
