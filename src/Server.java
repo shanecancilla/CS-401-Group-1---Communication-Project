@@ -115,7 +115,7 @@ public class Server {
                     channel.hideChannel();
                 }
                 
-
+                // Read message from file in channels directory
                 try
                 {
                     File channelFP = new File("channels/" + channel.getName() + ".txt");
@@ -126,13 +126,20 @@ public class Server {
                         String secondLine = scan0.nextLine();
                         String secondTokens[] = secondLine.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
 
-                        Message msg = new Message(Integer.parseInt(secondTokens[0]), Integer.parseInt(secondTokens[1]), secondTokens[3].substring(1, secondTokens.length - 1));
+                        Message msg = new Message(
+                            Integer.parseInt(secondTokens[0]),
+                            Integer.parseInt(secondTokens[1]),
+                            secondTokens[3].substring(1, secondTokens.length - 1)
+                        );
+
                         if (Boolean.parseBoolean(secondTokens[2]))
                         {
                             msg.hideMessage();
                         }
+
                         channel.addMessage(msg);
                     }
+
                     scan0.close();
                 }
                 catch (Exception e0)
@@ -141,6 +148,7 @@ public class Server {
                 }
 
                 channels.add(channel);
+                numChannels += 1;
             }
 
             scan.close();
@@ -516,7 +524,7 @@ public class Server {
         } catch (IOException e1) {
             e1.printStackTrace();
         }
-        
+
         ServerSocket server = null;
         try {
             server = new ServerSocket(1234);
