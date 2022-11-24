@@ -5,11 +5,15 @@ import java.util.ArrayList;
 
 import java.net.ServerSocket;
 import java.net.Socket;
+
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
 import java.io.File;
 import java.io.FileWriter;
+
 import java.io.IOException;
+
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -31,6 +35,8 @@ public class Server {
 
     List<Channel> channels;
     List<PrivateChannels> privateMessages;
+
+    Logs serverLogs;
 
     void loadUsers()
     {
@@ -306,6 +312,7 @@ public class Server {
         Socket socket;
         public void run()
         {
+            serverLogs.addLog("Connected " + socket.getInetAddress().getHostAddress());
             try
             {
                 OutputStream outputStream = socket.getOutputStream();
@@ -523,9 +530,12 @@ public class Server {
     {
         try {
             Files.createDirectory(Paths.get("channels"));
+            Files.createDirectory(Paths.get("logs"));
         } catch (IOException e1) {
             e1.printStackTrace();
         }
+
+        serverLogs = new Logs();
 
         ServerSocket server = null;
         try {
