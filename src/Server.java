@@ -310,6 +310,13 @@ public class Server {
     public class ClientHandler implements Runnable
     {
         Socket socket;
+        
+        int userID;
+        int channelID;
+
+        String currentUsername;
+        String currentChannelName;
+
         public void run()
         {
             serverLogs.addLog("Connected " + socket.getInetAddress().getHostAddress());
