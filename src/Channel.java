@@ -35,7 +35,7 @@ public class Channel {
     /**
      *  Holds all the logs for the IT user to read
      */
-    Logging logs;
+    Logs logs;
 
     /**
      * @return ID of the channel
@@ -151,6 +151,6 @@ public class Channel {
         setID(id);
         setName(name);
         this.isHidden = false;
-        this.logs = new Logging();
+        this.logs = new Logs();
     }
 }
