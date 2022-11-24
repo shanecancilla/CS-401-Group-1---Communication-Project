@@ -34,6 +34,8 @@ public class Channel {
 
     /**
      *  Holds all the logs for the IT user to read
+     *  @see isHidden
+     *  @see hideChannels
      */
     Logs logs;
 
@@ -86,6 +88,18 @@ public class Channel {
      * @author Aftersol
      */
     void setName(String name) { this.name = name; }
+
+    /**
+     * Hides the channel from regular users but not the IT
+     * 
+     * @see getName
+     * 
+     * @author Aftersol
+     */
+    void showChannel() { 
+        logs.addLog(getName() + " has been unhidden");
+        this.isHidden = false; 
+    }
 
     /**
      * Hides the channel from regular users but not the IT
