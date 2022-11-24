@@ -113,6 +113,16 @@ public class Channel {
         messages.add(msg);
     }
 
+    public List<Message> getMessages(int x, int y)
+    {
+        return messages.subList(x, y);
+    }
+
+    public List<Message> getLastMessages(int n)
+    {
+        return getMessages(messages.size() - n, messages.size());
+    }
+
     public List<String> getLogs()
     {
         return logs.getLogs();
