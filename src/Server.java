@@ -313,9 +313,11 @@ public class Server {
         
         int userID;
         int channelID;
+        int privateChannelID;
 
         String currentUsername;
         String currentChannelName;
+        String currentPrivateChannelName;
 
         public void run()
         {
