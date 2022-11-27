@@ -297,6 +297,115 @@ public class Server {
 			return;
 		}
     }
+    
+    void loadLogs()
+    {
+        try
+        {
+            Files.createDirectory(Paths.get("logs"));
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            return;
+        }
+
+        for (Channel channel: channels)
+        {
+            try
+            {
+                File fp = new File ("logs/" + channel.getName()+".log");
+                Scanner scan = new Scanner(fp);
+                while(scan.hasNextLine())
+                {
+                    String log = scan.nextLine();
+                    channel.logMessage(log);
+                }
+                
+                scan.close();
+            }   
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }   
+        }
+    }
+
+    void saveLogs()
+    {
+        try
+        {
+            Files.createDirectory(Paths.get("logs"));
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            return;
+        }
+        for (Channel channel: channels)
+        {
+            List<String> logs = channel.getLogs();
+            
+            String logStr = new String();
+            for (String log : logs)
+            {
+                logStr += log + "\n";
+            }
+
+            try
+            {
+                FileWriter fp = new FileWriter("logs/" + channel.getName()+ ".log");
+                fp.write(logStr);
+                fp.close();
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+    void loadServerLogs()
+    {
+        try
+        {
+            File fp = new File ("server.log");
+            Scanner scan = new Scanner(fp);
+            while(scan.hasNextLine())
+            {
+                String log = scan.nextLine();
+                serverLogs.addLog(log);
+            }
+            
+            scan.close();
+        }   
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }   
+    }
+
+    void saveServerLogs()
+    {
+
+        List<String> logs = serverLogs.getLogs();
+        
+        String logStr = new String();
+        for (String log : logs)
+        {
+            logStr += log + "\n";
+        }
+
+        try
+        {
+            FileWriter fp = new FileWriter("server.log");
+            fp.write(logStr);
+            fp.close();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
 
     void broadcastMessages()
     {
@@ -531,6 +640,33 @@ public class Server {
         }
     }
 
+    public class LogHandler implements Runnable
+    {
+        long start;
+        boolean shouldQuit;
+        public void run()
+        {
+            while (shouldQuit == false)
+            {
+                long end = System.currentTimeMillis();
+            
+                long diff = end - start;
+                if (diff > 60000)
+                {
+                    saveLogs();
+                    saveServerLogs();
+                    start = end;
+                }
+            }
+
+        }
+        LogHandler()
+        {
+            start = System.currentTimeMillis();
+            shouldQuit = false;
+        }
+    }
+
     /**
      * The entry point for server side of the communication system
      * @param args Arguments for server (unused)
@@ -547,6 +683,11 @@ public class Server {
         serverLogs = new Logs();
 
         ServerSocket server = null;
+
+        LogHandler logHandler = new LogHandler();
+        Thread logThread = new Thread(logHandler);
+        logThread.start();
+
         try {
             server = new ServerSocket(1234);
             while (true)
@@ -554,7 +695,8 @@ public class Server {
                 Socket client = server.accept();
 
                 ClientHandler handler = new ClientHandler(client);
-
+                
+                serverLogs.addLog("Connected " + client.getInetAddress().getHostAddress());
                 Thread t = new Thread(handler);
                 t.start();
             }
@@ -577,6 +719,8 @@ public class Server {
                     }
                 }
             }
+            logHandler.shouldQuit = true;
+            saveLogs();
         }
 
     }
