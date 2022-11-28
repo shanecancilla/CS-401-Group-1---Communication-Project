@@ -685,6 +685,9 @@ public class Server {
         ServerSocket server = null;
 
         LogHandler logHandler = new LogHandler();
+
+        // Comment below out if you don't want to log server
+
         Thread logThread = new Thread(logHandler);
         logThread.start();
 
@@ -719,8 +722,11 @@ public class Server {
                     }
                 }
             }
+
             logHandler.shouldQuit = true;
+
             saveLogs();
+            saveServerLogs();
         }
 
     }
