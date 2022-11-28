@@ -11,8 +11,8 @@ public class UserTester {
         String passwordString = "admin";
 
         User testUser = new User(id,name,passwordString);
-        Assert(testUser.getID() = 1);
-        Assert(testUser.getUsername().equals("admin"));
-        Assert(testUser.getPassword().equals("admin"));
+        assertEquals(testUser.getID(), 1);
+        assert(testUser.getUsername().equals("admin"));
+        assert(testUser.getPassword().equals("admin"));
     }
 }

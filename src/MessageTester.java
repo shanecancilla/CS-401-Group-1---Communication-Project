@@ -12,10 +12,10 @@ public class MessageTester {
 
         Message msg = new Message(id, userID, msgContent);
 
-        Assert(msg.getID() == 1);
-        Assert(msg.getUserID() == 1);
-        Assert(msg.getStatus() == false);
-        Assert(msg.msgContent().equals("Hello world!"));
+        assert(msg.getID() == 1);
+        assert(msg.getUserID() == 1);
+        assert(msg.getStatus() == false);
+        assert(msg.msgContent().equals("Hello world!"));
     }
 
     @Test
@@ -23,8 +23,8 @@ public class MessageTester {
     {
         Message msg = new Message(0, 0, null);
 
-        Assert(msg.getStatus() == false);
+        assert(msg.getStatus() == false);
         msg.hideMessage();
-        Assert(msg.getStatus() == true);
+        assert(msg.getStatus() == true);
     }
 }

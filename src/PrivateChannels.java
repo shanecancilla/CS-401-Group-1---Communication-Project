@@ -1,4 +1,4 @@
-public class PrivateMessage extends Channel {
+public class PrivateChannels extends Channel {
     int senderID;
     int recepientID;
 
@@ -7,7 +7,7 @@ public class PrivateMessage extends Channel {
         super.addMessage(message);
     }
 
-    PrivateMessage(int id, String name)
+    PrivateChannels(int id, String name)
     {
         super(id, name);
     }

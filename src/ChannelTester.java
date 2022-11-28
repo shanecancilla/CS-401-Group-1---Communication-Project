@@ -14,8 +14,7 @@ public class ChannelTester
         Channel channel = new Channel(id, name);
         channel.addMessage(msg);
         
-        Assert(channel.getID() == 1);
-        Assert(channel.userID() == 1);
-        Assert(channel.name().equals("channel"));
+        assertEquals(channel.getID(), 1);
+        assert(channel.name().equals("channel"));
     }
 }
